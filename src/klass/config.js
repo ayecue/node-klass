@@ -10,6 +10,7 @@
 var getNs = require('../common/getNs'),
 	regNs = require('../common/regNs'),
 	extend = require('../common/extend'),
+	applyIf = require('../common/applyIf'),
 	req = require;
 
 function initConfig(){
@@ -20,7 +21,7 @@ function initConfig(){
 
 		setScope: function(scope){
 			this.scope = scope;
-			extend(scope,this.$scope);
+			applyIf(scope,this.$scope);
 			return this;
 		},
 
@@ -44,6 +45,10 @@ function initConfig(){
 		$reg: function(id,object){
 			if (this.scope) {
 				regNs(id,object,this.scope);
+			}
+			var curr = this.$get(id);
+			if (curr){
+				applyIf(object,curr);
 			}
 			return regNs(id,object,this.$scope);
 		},

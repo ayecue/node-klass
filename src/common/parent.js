@@ -17,5 +17,5 @@ module.exports = function(args,prop){
 		klass = self.getCalledMethodKlass(),
 		parent = klass.getParent();
 
-	if (parent) return call(parent[prop] || parent,args);
+	if (parent) return call.call(self,parent[prop] || parent,args);
 };

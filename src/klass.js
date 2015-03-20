@@ -36,6 +36,8 @@ module.exports = {
 	getNamespace: getNs,
 	extend: extend,
 	toArray: require('./common/toArray'),
+	forEach: require('./common/forEach'),
+	printf: require('./common/printf'),
 	from: require('./common/from'),
 	typeOf: require('./common/typeOf'),
 	indexOf: require('./common/indexOf'),
