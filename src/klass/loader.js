@@ -40,7 +40,7 @@ function array(values){
 	return values instanceof Array ? object(values) : single(values);
 }
 
-module.exports = function(handle,values){
+module.exports = function(handle,values,callback){
 	var libraries = [],
 		properties = extend({},defaultProperties),
 		className = handle.$classname,
@@ -48,6 +48,8 @@ module.exports = function(handle,values){
 		done = function(){
 			merge(handle,values);
 			register(handle);
+			myState.pending = false;
+			callback && callback(handle,className);
 		};
 
 	!myState && regNs(handle.$classname,myState = {pending:true},config.$dependencyMap);

@@ -1,4 +1,4 @@
-# node-klass v0.1.0
+# node-klass v0.1.1
 [![Build Status](https://travis-ci.org/ayecue/node-klass.png?branch=master)](https://travis-ci.org/ayecue/node-klass)
 
 > Pseudo ExtJS-like-Class library

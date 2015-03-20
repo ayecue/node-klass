@@ -20,15 +20,18 @@ var toArray = require('../common/toArray'),
 /**
  *	Create pseudo class
  */
-module.exports = function(){
-	var args = toArray(arguments),
-		name = typeof args[0] == 'string' ? args.shift() : id(),
-		values = args.shift(),
-		handle = compiler(name);
+module.exports = function(name,values,callback){
+	if (typeof name !== 'string') {
+		name = id();
+		values = id;
+		callback = values;
+	}
+
+	var handle = compiler(name);
 	
 	extend(handle,statics(name,handle));
 	extend(handle.prototype,prototypes(name,handle));
-	loader(handle,values);
+	loader(handle,values,callback);
 
 	return handle;
 };
