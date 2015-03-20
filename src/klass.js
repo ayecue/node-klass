@@ -39,5 +39,6 @@ module.exports = {
 	from: require('./common/from'),
 	typeOf: require('./common/typeOf'),
 	indexOf: require('./common/indexOf'),
-	id: require('./common/id')
+	id: require('./common/id'),
+	applyIf: require('./common/applyIf')
 };
