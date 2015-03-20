@@ -69,7 +69,6 @@ module.exports = function(libraries,callback){
             }
 
             var k = config.req(filepath);
-            regNs(name,k,GLOBAL);
             done(true,k);
         });
     },function(result){

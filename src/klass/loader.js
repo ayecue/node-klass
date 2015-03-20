@@ -22,7 +22,7 @@ var extend = require('../common/extend'),
 var defaultProperties = {'extends':single,'mixins':object,'requires':array};
 
 function single(value){
-	if (typeof value == 'string' && config.$get(value) === null && getNs(value,config.$dependencyMap) === null) {
+	if (typeof value == 'string' && config.$get(value) === null) {
 		regNs(value,{pending:false},config.$dependencyMap);
 		return [value];
 	}
