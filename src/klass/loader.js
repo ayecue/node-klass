@@ -23,7 +23,7 @@ var defaultProperties = {'extends':single,'mixins':object,'requires':array};
 
 function single(value){
 	if (typeof value == 'string' && config.$get(value) == null) {
-		regNs(value,{pending:false},config.$dependencyMap);
+		config.$regDep(value,{pending:false});
 		return [value];
 	}
 }
@@ -44,7 +44,7 @@ module.exports = function(handle,values,callback){
 	var libraries = [],
 		properties = extend({},defaultProperties),
 		className = handle.$classname,
-		myState = getNs(className,config.$dependencyMap),
+		myState = config.$getDep(className),
 		done = function(){
 			merge(handle,values);
 			register(handle);
@@ -52,7 +52,7 @@ module.exports = function(handle,values,callback){
 			callback && callback(handle,className);
 		};
 
-	!myState && regNs(handle.$classname,myState = {pending:true},config.$dependencyMap);
+	!myState && config.$regDep(handle.$classname,myState = {pending:true});
 
 	forEach(defaultProperties,function(key,fn){
 		if (key in values) {

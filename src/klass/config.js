@@ -7,56 +7,56 @@
  */
 'use strict';
 
-var getNs = require('../common/getNs'),
-	regNs = require('../common/regNs'),
-	extend = require('../common/extend'),
-	applyIf = require('../common/applyIf'),
+var Shadow = require('./shadow'),
 	req = require;
 
-function initConfig(){
-	return {
-		req: req,
-		source: req.main.filename,
-		scope: GLOBAL || {},
+function Config(){
+	this.req = req;
+	this.source = req.main.filename;
+	this.scope = GLOBAL || {};
+	this.$shadow = new Shadow();
+	this.$dependencyMap = new Shadow();
+}
 
-		setScope: function(scope){
-			this.scope = scope;
-			applyIf(scope,this.$scope);
-			return this;
-		},
+Config.prototype = {
+	setScope: function(scope){
+		this.scope = scope;
+		this.$shadow.applyTo(this.scope);
+		return this;
+	},
 
-		setSource: function(source){
-			this.source = source;
-			return this;
-		},
+	setSource: function(source){
+		this.source = source;
+		return this;
+	},
 
-		getScope: function(){
-			return this.scope;
-		},
+	getScope: function(){
+		return this.scope;
+	},
 
-		getSource: function(){
-			return this.source;
-		},
+	getSource: function(){
+		return this.source;
+	},
 
-		//internal
-		$dependencyMap: {},
-		$scope: {},
+	//internal
+	$reg: function(id,object){
+		this.$shadow.register(id,object);
+		if (this.scope) {
+			this.$shadow.applyTo(this.scope);
+		}
+	},
 
-		$reg: function(id,object){
-			if (this.scope) {
-				regNs(id,object,this.scope);
-			}
-			var curr = this.$get(id);
-			if (curr){
-				applyIf(object,curr);
-			}
-			return regNs(id,object,this.$scope);
-		},
+	$get: function(id){
+		return this.$shadow.get(id);
+	},
 
-		$get: function(id){
-			return getNs(id,this.$scope);
-		},
-	};
+	$regDep: function(id,object){
+		this.$dependencyMap.register(id,object);
+	},
+
+	$getDep: function(id){
+		this.$dependencyMap.get(id);
+	}
 };
 
-module.exports = initConfig();
+module.exports = new Config();

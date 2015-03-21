@@ -9,14 +9,19 @@
 
 var forEach = require('./forEach');
 
+function set(handle,property,value){
+	return handle[property] = value || {};
+}
+
 /**
  *	Create namespace
  */
-module.exports = function(id,value,root,delimiter){
+module.exports = function(id,value,root,customSet,delimiter){
 	var namespaces = id.split(delimiter || '.'),
-		last = namespaces.pop();
+		last = namespaces.pop(),
+		handle = forEach(namespaces,function(index,value){
+			this.result = this.result[value] || (this.result[value] = {});
+		},root);
 
-	return forEach(namespaces,function(index,value){
-		this.result = this.result[value] || (this.result[value] = {});
-	},root)[last] = value || {};
+	return (customSet || set)(handle,last,value);
 };
