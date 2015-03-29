@@ -1,8 +1,8 @@
 {
     "name": "node-klass",
-    "version": "0.1.5",
+    "version": "1.0.0",
     "description": "Pseudo ExtJS-like-Class library",
-    "main": "src/klass.js",
+    "main": "src/Core.js",
     "homepage": "https://github.com/ayecue/node-klass",
     "scripts": {
         "test": "nodeunit ./test/klass_test.js"
@@ -20,7 +20,8 @@
         "url": "https://github.com/ayecue/node-klass/blob/master/LICENSE-MIT"
     }],
     "dependencies": {
-        "async": "~0.9.0"
+        "async": "~0.9.0",
+        "colors": "1.0.3"
     },
     "bugs": {
         "url": "https://github.com/ayecue/node-klass/issues"

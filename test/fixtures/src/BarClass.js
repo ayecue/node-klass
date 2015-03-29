@@ -1,6 +1,6 @@
 'use strict';
 
-var Klass = require('../../../src/klass');
+var Klass = require('../../../src/Core');
 
 module.exports = Klass.define('Test.Fixtures.Src.BarClass',{
 	mixins: {

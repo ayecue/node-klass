@@ -1,6 +1,6 @@
 'use strict';
 
-var Klass = require('../../../src/klass');
+var Klass = require('../../../src/Core');
 
 var fooClass = Klass.define('Test.Fixtures.Src.FooClass',{
 	requires: [

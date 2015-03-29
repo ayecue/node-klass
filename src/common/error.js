@@ -7,4 +7,13 @@
  */
 'use strict';
 
-module.exports = {};
+module.exports = (function(
+	message
+){
+	return function(){
+		var str = message.apply(null,arguments);
+		return new Error(str);
+	};
+})(
+	require('./message')
+);

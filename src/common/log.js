@@ -8,14 +8,12 @@
 'use strict';
 
 module.exports = (function(
-	typeOf
+	message
 ){
-	return function(values){
-		if (typeOf(values) === "array") {
-			return values;
-		}
-		return [values];
+	return function(){
+		var str = message.apply(null,arguments);
+		console.log(str);
 	};
 })(
-	require('./typeOf')
+	require('./message')
 );

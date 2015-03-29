@@ -7,38 +7,44 @@
  */
 'use strict';
 
-var forEach = require('./forEach'),
-	printf = require('./printf');
+module.exports = (function(
+	forEach,
+	message,
+	CONSTANTS
+){
+	function auto(scope,keyword,value){
+		var setterName, getterName;
 
-/**
- *	Shortcuts
- */
-var setterNameTpl = 'set<%=:olettersnumber,camelcase:keyword%>',
-	getterNameTpl = 'get<%=:olettersnumber,camelcase:keyword%>';
-
-/**
- *	Create automatic setter/getter for class
- */
-module.exports = function(values){
-	var self = this;
-
-	forEach(values,function(keyword,value){
-		if (typeof value != 'function') {
-			var setterName = printf(setterNameTpl,'keyword',keyword),
-				getterName = printf(getterNameTpl,'keyword',keyword);
-
-			if (!(setterName in self)) {
-				self[setterName] = function(v){
-					this[keyword]=v;
-					return this;
-				};
-			}
-
-			if (!(getterName in self)) {
-				self[getterName] = function(){
-					return this[keyword];
-				};
-			}
+		if (typeof keyword === 'object') {
+			return forEach(keyword,function(keyword,value){
+				auto(scope,keyword,value);
+			});
 		}
-	});
-}
+
+		if (typeof value === 'function') {
+			return;
+		}
+
+		setterName = message(CONSTANTS.KLASS.SETTER,'keyword',keyword),
+		getterName = message(CONSTANTS.KLASS.GETTER,'keyword',keyword);
+
+		if (!(setterName in scope)) {
+			scope[setterName] = function(v){
+				this[keyword]=v;
+				return this;
+			};
+		}
+
+		if (!(getterName in scope)) {
+			scope[getterName] = function(){
+				return this[keyword];
+			};
+		}
+	}
+
+	return auto;
+})(
+	require('./forEach'),
+	require('./message'),
+	require('../Constants')
+);

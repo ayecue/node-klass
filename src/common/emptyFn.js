@@ -7,15 +7,6 @@
  */
 'use strict';
 
-module.exports = (function(
-	typeOf
-){
-	return function(values){
-		if (typeOf(values) === "array") {
-			return values;
-		}
-		return [values];
-	};
-})(
-	require('./typeOf')
-);
+module.exports = function() {
+	return;
+};

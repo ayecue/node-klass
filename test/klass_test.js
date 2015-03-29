@@ -1,6 +1,6 @@
 'use strict';
 
-var Klass = require('../src/klass');
+var Klass = require('../src/Core');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -32,17 +32,18 @@ exports.klass = {
 
         expected = 'wat';
 
-        Klass.setConfig({
-            source: __filename
-        }).require([
-            'Test.Fixtures.Src.FooClass'
-        ],function(){
-            var momo = new Test.Fixtures.Src.FooClass();
+        Klass
+            .setSource(__filename)
+            .setScope(GLOBAL)
+            .require([
+                'Test.Fixtures.Src.FooClass'
+            ],function(){
+                var momo = new Test.Fixtures.Src.FooClass();
 
-            actual = momo.test;
+                actual = momo.test;
 
-            test.equal(actual, expected, 'task output should equal ' + expected);
-        });
+                test.equal(actual, expected, 'task output should equal ' + expected);
+            });
 
         test.done();
     }
