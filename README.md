@@ -198,6 +198,25 @@ objectFusion.bar;
 ```
 
 
+#### Klass.applyIf
+Arguments: `Object`, `Object` [...]
+Return: `Object`
+
+Simple extend method to merge multiple objects together if those are not null.
+
+Example usage: 
+```
+var objectFusion = applyIf({
+	foo : 0x01
+},{
+	bar : 0x02
+});
+
+objectFusion.foo;
+objectFusion.bar;
+```
+
+
 #### Klass.printf
 Arguments: `String`, `Object`
 Return: `String`
@@ -334,15 +353,90 @@ Klass.setScope(GLOBAL);
 ```
 
 
-#### Internal klasses
+#### Klass.Argmap
 
-### Klass.Argmap
-### Klass.Assert
-### Klass.Listener
-### Klass.Event
-### Klass.Map
-### Klass.Callback
-### Klass.Collection
+Used to easily manage a map of arguments.
+
+* setIncludeArgs - Set fixed include args
+* set - Set certain map value
+* get - Get certain map value
+* remove - Remove value from map
+* collect - Collect all args of the map which should be exposed
+* inject - Inject certain values and collect all args of the map which should be exposed
+
+
+#### Klass.Assert
+
+Used to easily check if certain conditions are correct.
+
+* doThrow - Allow assert to throw erros
+* notThrow - Disallow assert to throw errors
+* isError - Is allowed to throw error
+* isLog - Is allowed to output console message
+* isNull - Check if value is undefined
+* notNull - Check if value is not undefined
+* unequal - Check if value is not equal to other value
+* equal - Check if value is equal to other value
+* notType - Check if value is not a certain type
+* isType - Check if value is a certain type
+* expection - Throw exception
+* log - Print console log message
+
+
+#### Klass.Listener
+
+Collection of events with callbacks.
+
+* get - Get event
+* on - Register event
+* off - Unregister event
+* fire - Fire event
+* remove - Remove event
+
+
+#### Klass.Event
+
+Collection of callbacks.
+
+* push - Add callback
+* remove - Remove callback
+* get - Get callback
+* executeAll - Execute all callbacks
+* clone - Clone event
+
+
+#### Klass.Map
+
+Used to manage namespaces in the global scope for example.
+
+* parse - Parse id string
+* set - Set certain namespace with value
+* create - Create certain namespace
+* get - Get certain namespace
+
+
+#### Klass.Callback
+
+Used to have an easy way to create callbacks with all kind of options.
+
+* execute - Execute registered callback
+
+
+#### Klass.Collection
+
+Used to manage collection of klasses/objects.
+
+* range - Get range of records in collection
+* isEmpty - Check if collection is empty
+* each - Iterate through collection
+* sort - Sort collection either 'ASC' or 'DESC'
+* indexOf - Get index of item in collection
+* get - Get item in collection
+* getAll - Get all items of collection in an array
+* getById - Get certain item in collection by position
+* push - Add an item to collection
+* remove - Remove item from collection
+* clone - Clone collection
 
 
 #### Klass.define
