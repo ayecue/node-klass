@@ -14,7 +14,22 @@ npm install node-klass
 
 ## Description
 
-This is a pseudo klass library. It's kinda like the ExtJS pseudo klass system. It loads automaticly required klasses.
+This a class library for Javascript. You could compare this system with the class library of ExtJS. This library is right now optimized for CommonJS. 
+It got some nice features like:
+
+* Autoloading required klasses from filesystem by a certain finding pattern
+* Automaticly registering klasses to GLOBAL with correct namespaces so you can use them anywhere
+* Allows to extend klasses
+* Allows to add mixins to your klass
+* Allows singletons
+* Allows inheritance of statics
+* Automaticly adds setter/getter to your klass
+* Possibility to call certain context methods in klasses like: callParent, callSuper, getCalled [...]
+* Secure against klass namespace rewriting
+* Also adding some Utility functionality
+* More to come...
+
+So if you are interested check it out. There's more stuff to come like aliases, configs etc.
 
 
 ## Functions
@@ -467,7 +482,6 @@ Following defauts statics are extended to your klass:
 
 Following defauts statics are extended to your klass:
 
-* isPrototypeObject - Define if this object is an prototype object
 * getDefaultValues() - Get default values which should be extended on every new created instance
 * getklass() - Get base/constructor of instance
 * getCalled() - Get current called method (just working inside klass functions)
@@ -476,8 +490,7 @@ Following defauts statics are extended to your klass:
 * getCalledFunction() - Get current called method function (just working inside klass functions)
 * getCalledBefore() - Get before called method function (just working inside klass functions)
 * callParent(arguments) - Call either previous method or parent method if there's one (just working inside klass functions)
-* callParent(arguments) - Call parent method if there's one (just working inside klass functions)
-* getParent() - Get extending parent
+* callSuper(arguments) - Call parent method if there's one (just working inside klass functions)
 * getName() - Get name of klass
 * extend(object1,object2,object3) - Extend properties to current instance
 * logMessage(arguments,isError) - Print message in console in context of klass (just working properly inside klass functions)
