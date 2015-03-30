@@ -1,4 +1,4 @@
-# node-klass v1.0.1
+# node-klass v1.0.2
 [![Build Status](https://travis-ci.org/ayecue/node-klass.png?branch=master)](https://travis-ci.org/ayecue/node-klass)
 
 > Javascript class library to increase speed of development process.
@@ -30,6 +30,80 @@ It got some nice features like:
 * More to come...
 
 So if you are interested check it out. There's more stuff to come like aliases, configs etc.
+
+![Console](https://raw.githubusercontent.com/ayecue/img/master/node-klass/demo.gif)
+
+
+#### Klass.define
+
+This method is there to create your klasses. It's the basic klass constructor.
+
+Following properties are there to conifgurate your klass:
+
+* extends - Library you want to extend
+* mixins - Mixins you want to use in your klass
+* statics - Static properties which you want to extend to your base
+
+Following defaut statics are extended to your klass:
+
+* singleton - Define if your klass is a singleton
+* debug - Define if the klass is in debug mode
+* autoSetterGetter - Define if automaticly setter/getter get created
+* getKlass() - Get base klass/Get constructor
+* getCalled() - Get current called method (just working inside klass functions)
+* getCalledKlass() - Get current called method klass (just working inside klass functions)
+* getCalledName() - Get current called method name (just working inside klass functions)
+* getCalledFunction() - Get current called method function (just working inside klass functions)
+* getCalledBefore() - Get before called method function (just working inside klass functions)
+* callParent(arguments) - Call either previous method or parent method if there's one (just working inside klass functions)
+* callSuper(arguments) - Call parent method if there's one (just working inside klass functions)
+* getName() - Get name of klass
+* logMessage(arguments,isError) - Print message in console in context of klass (just working properly inside klass functions)
+
+Following defaut prototypes are extended to your klass:
+
+* getDefaultValues() - Get default values which should be extended on every new created instance
+* getklass() - Get base/constructor of instance
+* getCalled() - Get current called method (just working inside klass functions)
+* getCalledKlass() - Get current called method klass (just working inside klass functions)
+* getCalledName() - Get current called method name (just working inside klass functions)
+* getCalledFunction() - Get current called method function (just working inside klass functions)
+* getCalledBefore() - Get before called method function (just working inside klass functions)
+* callParent(arguments) - Call either previous method or parent method if there's one (just working inside klass functions)
+* callSuper(arguments) - Call parent method if there's one (just working inside klass functions)
+* getName() - Get name of klass
+* extend(object1,object2,object3) - Extend properties to current instance
+* logMessage(arguments,isError) - Print message in console in context of klass (just working properly inside klass functions)
+
+Example usage: 
+```
+Klass.setSource(__filename).setScope(GLOBAL);
+
+var smaller = klass.define('w.smaller',{
+	extends : 'w.test',
+	test : 'woot',
+	lulu : {
+		1 : 2
+	},
+	requires: [
+		'w.foo'
+	],
+	mkmk : [5,9,8],
+	mixins : {
+		something : 'w.other'
+	},
+	statics : {
+		testing : function(){
+			console.log('wad');
+			this.callParent();
+		}
+	},
+	foo : function(){
+		this.callParent(['wat']);
+		this.logMessage('test',true);
+	}
+});
+```
 
 
 ## Functions
@@ -452,75 +526,3 @@ Used to manage collection of klasses/objects.
 * push - Add an item to collection
 * remove - Remove item from collection
 * clone - Clone collection
-
-
-#### Klass.define
-
-This method is there to create your klasses. It's the basic klass constructor.
-
-Following properties are there to conifgurate your klass:
-
-* extends - Library you want to extend
-* mixins - Mixins you want to use in your klass
-* statics - Static properties which you want to extend to your base
-
-Following defauts statics are extended to your klass:
-
-* singleton - Define if your klass is a singleton
-* debug - Define if the klass is in debug mode
-* autoSetterGetter - Define if automaticly setter/getter get created
-* getKlass() - Get base klass/Get constructor
-* getCalled() - Get current called method (just working inside klass functions)
-* getCalledKlass() - Get current called method klass (just working inside klass functions)
-* getCalledName() - Get current called method name (just working inside klass functions)
-* getCalledFunction() - Get current called method function (just working inside klass functions)
-* getCalledBefore() - Get before called method function (just working inside klass functions)
-* callParent(arguments) - Call either previous method or parent method if there's one (just working inside klass functions)
-* callSuper(arguments) - Call parent method if there's one (just working inside klass functions)
-* getName() - Get name of klass
-* logMessage(arguments,isError) - Print message in console in context of klass (just working properly inside klass functions)
-
-Following defauts statics are extended to your klass:
-
-* getDefaultValues() - Get default values which should be extended on every new created instance
-* getklass() - Get base/constructor of instance
-* getCalled() - Get current called method (just working inside klass functions)
-* getCalledKlass() - Get current called method klass (just working inside klass functions)
-* getCalledName() - Get current called method name (just working inside klass functions)
-* getCalledFunction() - Get current called method function (just working inside klass functions)
-* getCalledBefore() - Get before called method function (just working inside klass functions)
-* callParent(arguments) - Call either previous method or parent method if there's one (just working inside klass functions)
-* callSuper(arguments) - Call parent method if there's one (just working inside klass functions)
-* getName() - Get name of klass
-* extend(object1,object2,object3) - Extend properties to current instance
-* logMessage(arguments,isError) - Print message in console in context of klass (just working properly inside klass functions)
-
-Example usage: 
-```
-Klass.setSource(__filename).setScope(GLOBAL);
-
-var smaller = klass.define('w.smaller',{
-	extends : 'w.test',
-	test : 'woot',
-	lulu : {
-		1 : 2
-	},
-	requires: [
-		'w.foo'
-	],
-	mkmk : [5,9,8],
-	mixins : {
-		something : 'w.other'
-	},
-	statics : {
-		testing : function(){
-			console.log('wad');
-			this.callParent();
-		}
-	},
-	foo : function(){
-		this.callParent(['wat']);
-		this.logMessage('test',true);
-	}
-});
-```
