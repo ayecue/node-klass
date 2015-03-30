@@ -20,30 +20,30 @@ module.exports = (function(
 		self: KlassStacktrace,
 		push: function(method){
 			var me = this,
-				trace = me.self.trace;
+				trace = me.trace;
 
 			if (trace) {
 				trace.$next = method;
 				method.$last = trace;
 			}
 
-			me.self.trace = method;
+			me.trace = method;
 		},
 
 		pop: function(){
 			var me = this,
-				trace = me.self.trace;
+				trace = me.trace;
 
 			if (trace.$last) {
 				var last = trace;
-				me.self.trace = trace.$last;
+				me.trace = trace.$last;
 				last.$last = null;
-				me.self.trace.$next = null;
+				me.trace.$next = null;
 			}
 		},
 
 		get: function(){
-			return this.self.trace;
+			return this.trace;
 		}
 	});
 

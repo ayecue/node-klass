@@ -16,7 +16,8 @@ module.exports = (function(
 ){
 	function Assert(doThrow){
 		extend(this,{
-			doThrow: doThrow || false
+			doThrow: doThrow || false,
+			doLog: CONSTANTS.KLASS.ASSERTLOG
 		});
 	}
 
@@ -39,22 +40,30 @@ module.exports = (function(
 			return this;
 		},
 
+		doLog: function(){
+			this.doLog = true;
+			return this;
+		},
+
+		notLog: function(){
+			this.doLog = false;
+			return this;
+		},
+
 		isError: function(){
 			return this.doThrow;
 		},
 
 		isLog: function(){
-			return !this.doThrow;
+			return !this.doThrow && this.doLog;
 		},
 
 		isNull: function(value,tpl,prop,logval){
 			var me = this,
 				isExpected = value === null || value === undefined;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
@@ -64,10 +73,8 @@ module.exports = (function(
 			var me = this,
 				isExpected = value !== null && value !== undefined;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
@@ -77,10 +84,8 @@ module.exports = (function(
 			var me = this,
 				isExpected = value !== expect;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
@@ -90,10 +95,8 @@ module.exports = (function(
 			var me = this,
 				isExpected = value === expect;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
@@ -103,10 +106,8 @@ module.exports = (function(
 			var me = this,
 				isExpected = typeOf(value) !== expect;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
@@ -116,21 +117,29 @@ module.exports = (function(
 			var me = this,
 				isExpected = typeOf(value) === expect;
 
-			if (me.isError() && !isExpected) {
-				throw error(tpl,prop,logval);
-			} else if (me.isLog() && !isExpected) {
-				log(tpl,prop,logval);
+			if (!isExpected) {
+				me.expection(tpl,prop,logval);
 			}
 
 			return isExpected;
 		},
 
 		expection: function(tpl,prop,logval){
-			throw error(tpl,prop,logval);
+			var me = this;
+
+			if (me.isError()) {
+				throw error(tpl,prop,logval);
+			}
+
+			me.log(tpl,prop,logval);
 		},
 
 		log: function(tpl,prop,logval){
-			log(tpl,prop,logval);
+			var me = this;
+
+			if (me.isLog()) {
+				log(tpl,prop,logval);
+			}
 		}
 	});
 

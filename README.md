@@ -1,7 +1,7 @@
-# node-klass v1.0.0
+# node-klass v1.0.1
 [![Build Status](https://travis-ci.org/ayecue/node-klass.png?branch=master)](https://travis-ci.org/ayecue/node-klass)
 
-> Pseudo ExtJS-like-klass library
+> Javascript class library to increase speed of development process.
 
 
 ## Getting Started

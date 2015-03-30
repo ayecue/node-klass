@@ -32,6 +32,7 @@ exports.MESSAGES = {
 
 exports.KLASS = {
 	BASE: 'Base',
+	ASSERTLOG: false,
 	DEBUGGING: false,
 	SINGLETON: false,
 	AUTO: true,

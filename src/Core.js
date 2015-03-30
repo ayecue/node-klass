@@ -64,7 +64,7 @@ module.exports = (function(
 				priority: CONSTANTS.PRIORITY.HIGH,
 				ignoreFilter: true,
 				process: function(klass,values,hooks){
-					log(CONSTANTS.MESSAGES.CORE_EXTEND_KLASSNAME,'id',values.$klassName);
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_EXTEND_KLASSNAME,'id',values.$klassName);
 
 					if ('$klassName' in values) {
 						klass.$klassName = values.$klassName;
@@ -78,7 +78,7 @@ module.exports = (function(
 				priority: CONSTANTS.PRIORITY.HIGH,
 				ignoreFilter: true,
 				process: function(klass,values,hooks,done){
-					log(CONSTANTS.MESSAGES.CORE_LOAD_DEPS,'id',klass.getName());
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_LOAD_DEPS,'id',klass.getName());
 
 					var tasks = new Collection({
 							searchProperty: 'name',
@@ -168,7 +168,7 @@ module.exports = (function(
 			            parent = Base;
 			        }
 
-			        log(CONSTANTS.MESSAGES.CORE_EXTEND_PARENT,{
+			        Assert.d().log(CONSTANTS.MESSAGES.CORE_EXTEND_PARENT,{
 			        	id: klass.getName(),
 			        	parentId: parent.getName()
 			        });
@@ -190,7 +190,7 @@ module.exports = (function(
 			config: {
 				name: 'statics',
 				process: function(klass,values,hooks,done){
-					log(CONSTANTS.MESSAGES.CORE_EXTEND_STATICS,'id',klass.getName());
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_EXTEND_STATICS,'id',klass.getName());
 					klass.addStatics(values.statics);
 					delete values.statics;
 				}
@@ -200,7 +200,7 @@ module.exports = (function(
 			config: {
 				name: 'mixins',
 				process: function(klass,values,hooks,done){
-					log(CONSTANTS.MESSAGES.CORE_EXTEND_MIXINS,'id',klass.getName());
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_EXTEND_MIXINS,'id',klass.getName());
 
 					var mixins = values.mixins;
 
@@ -217,7 +217,7 @@ module.exports = (function(
 			config: {
 				name: 'config',
 				process: function(klass,values,hooks,done){
-					log(CONSTANTS.MESSAGES.CORE_EXTEND_CONFIG,'id',klass.getName());
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_EXTEND_CONFIG,'id',klass.getName());
 				}
 			}
 		},{
@@ -225,7 +225,7 @@ module.exports = (function(
 			config: {
 				name: 'singleton',
 				process: function(id,klass,values,hooks,done,argMap){
-					log(CONSTANTS.MESSAGES.CORE_CREATE_SINGLETON,'id',id);
+					Assert.d().log(CONSTANTS.MESSAGES.CORE_CREATE_SINGLETON,'id',id);
 
 					if (values.singleton) {
 						argMap.set('klass',new klass());
