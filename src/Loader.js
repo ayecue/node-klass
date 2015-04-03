@@ -19,6 +19,7 @@ module.exports = (function(
 	Assert,
 	Collection,
 	CONSTANTS,
+	Autoloader,
 	path,
     async,
     fs
@@ -26,6 +27,8 @@ module.exports = (function(
 	function Loader(options){
 		extend(this,{
 			manager: null,
+
+			autoloader: new Autoloader(),
 
 			cache: new Collection({
 				searchProperty: 'filepath',
@@ -44,7 +47,7 @@ module.exports = (function(
 	extend(Loader.prototype,{
 		self: Loader,
 		sourcePath: __filename,
-		loadFileTpl: '<%=file%>.js',
+		loadFileTpl: '<%=file%>',
 
 		setSource: function(sourcePath){
 			this.sourcePath = sourcePath;
@@ -63,7 +66,6 @@ module.exports = (function(
 			parts = name.split('.');
 
 			file = parts.pop();
-			file = printf(me.loadFileTpl,'file',file);
 
 			filepath = forEach(parts,function(_,name){
 	            this.result.push(decapitalize(name));
@@ -91,37 +93,35 @@ module.exports = (function(
 				return done(absolutepath);
 			}
 
-			dirparts = path.dirname(me.sourcePath);
-			dirparts = dirparts.split('/');
-			dirs = [];
+			me.autoloader.get(me.sourcePath,filepath,function(result){
+				if (me.enableCache) {
+					me.cache.push({
+						filepath: filepath,
+						absolutepath: result
+					});
+				}
 
-		    while (dirparts.length > 0) {
-		        currdir = dirparts.join('/') + filepath;
-		        dirs.push(currdir);
-		        dirparts.pop();
-		    }
+				Assert.d().log(CONSTANTS.MESSAGES.CORE_RESOLVE_DEP,{
+					name: name,
+					filepath: result
+				});
 
-		    async.detect(dirs, function(item,done){
-		        done(fs.existsSync(item) && fs.lstatSync(item).isFile());
-		    }, function(result){
-		    	if (me.enableCache) {
-		    		me.cache.push({
-		    			filepath: filepath,
-		    			absolutepath: result
-		    		});
-			    }
-
-			    Assert.d().log(CONSTANTS.MESSAGES.CORE_RESOLVE_DEP,{
-			    	name: name,
-			    	filepath: result
-			    });
-			    
-		        done(result);
-		    });
+				done(result);
+			});
 		},
 
 		require: function(deps,done){
 			var me = this,
+				fire = function(name){
+					var dep = me.manager.getKlass(name) || me.manager.get(name);
+
+					missing.remove(name);
+					argMap.set(name,dep);
+
+					if (missing.isEmpty()) {
+						done.apply(me,argMap.collect());
+					}
+				},
 				argMap, missing;
 
 			if (typeof deps === 'string') {
@@ -133,39 +133,48 @@ module.exports = (function(
 			});
 
 			if (deps.length > 0) {
-				missing = forEach(deps,function(_,id){
-					var dep = me.manager.getKlass(id);
+				missing = forEach(deps,function(_,name){
+					var isExternal = /^!/.test(name),
+						dep;
+
+					if (isExternal) {
+						name = name.substring(1);
+					}
+
+					dep = me.manager.getKlass(name) || me.manager.get(name);
 
 					if (!dep) {
-						this.result.push(id);
+						this.result.push({
+							name: name,
+							isExternal: isExternal
+						});
 					} else {
-						argMap.set(id,dep);
+						argMap.set(name,dep);
 					}
-				},[]);
+				},new Collection({
+					searchProperty: 'name',
+					getProperty: 'name'
+				}));
 
-				if (missing.length > 0) {
-					me.manager.addListener(function(id){
-						var dep = me.manager.getKlass(id),
-							idx = indexOf(missing,function(m){
-								return m === id;
-							});
+				if (!missing.isEmpty()) {
+					me.manager.addListener(fire,missing.getAll());
 
-						missing.splice(idx,1);
-						argMap.set(id,dep);
+					async.every(missing.range(),function(item,done){
+						me.resolve(item.name,function(filepath){
+							Assert.d(true).notNull(filepath,CONSTANTS.ERRORS.KLASS_LOADER_INVALID_PATH,'name',item.name);
 
-						if (missing.length === 0) {
-							done.apply(me,argMap.collect());
-						}
-					},missing);
+							var resolved = require(filepath);
 
-					async.every(deps,function(name,done){
-				        me.resolve(name,function(filepath){
-				        	Assert.d(true).notNull(filepath,CONSTANTS.ERRORS.KLASS_LOADER_INVALID_PATH,'name',name);
-				            done(true,require(filepath));
-				        });
-				    },emptyFn);
+							if (item.isExternal) {
+								me.manager.set(item.name,resolved);
+								fire(item.name);
+							}
 
-				    return;
+							done(true,resolved);
+						});
+					},emptyFn);
+
+					return;
 				}
 			}
 
@@ -186,6 +195,7 @@ module.exports = (function(
 	require('./Assert'),
 	require('./Collection'),
 	require('./Constants'),
+	require('node-cjs-autoloader'),
 	require('path'),
     require('async'),
 	require('fs')

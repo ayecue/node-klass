@@ -1,4 +1,4 @@
-# node-klass v1.0.2
+# node-klass v1.0.3
 [![Build Status](https://travis-ci.org/ayecue/node-klass.png?branch=master)](https://travis-ci.org/ayecue/node-klass)
 
 > Javascript class library to increase speed of development process.
